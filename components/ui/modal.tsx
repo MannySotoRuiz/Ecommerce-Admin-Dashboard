@@ -19,7 +19,7 @@ interface modalProps {
   children?: React.ReactNode;
 }
 
-const modal: FC<modalProps> = ({
+const Modal: FC<modalProps> = ({
   title,
   description,
   isOpen,
@@ -47,4 +47,4 @@ const modal: FC<modalProps> = ({
   );
 };
 
-export default modal;
+export default Modal;
