@@ -1,9 +1,18 @@
 import { FC } from "react";
+import prismadb from "@/lib/prismadb";
 
-interface pageProps {}
+interface pageProps {
+  params: { storeId: string };
+}
 
-const page: FC<pageProps> = ({}) => {
-  return <div>This is a dashboard!</div>;
+// DashboardPage
+const page: FC<pageProps> = async ({ params }) => {
+  const store = await prismadb.store.findFirst({
+    where: {
+      id: params.storeId,
+    },
+  });
+  return <div>Active Store: {store?.name}</div>;
 };
 
 export default page;
