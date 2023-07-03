@@ -23,8 +23,8 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/components/modals/alert-modal";
-// import { ApiAlert } from "@/components/ui/api-alert"
-// import { useOrigin } from "@/hooks/use-origin"
+import { ApiAlert } from "@/components/ui/api-alert";
+import { useOrigin } from "@/hooks/use-origin";
 
 const formSchema = z.object({
   name: z.string().min(2),
@@ -39,7 +39,7 @@ interface SettingsFormProps {
 export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
-  // const origin = useOrigin();
+  const origin = useOrigin();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -133,12 +133,12 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
           </Button>
         </form>
       </Form>
-      {/* <Separator /> */}
-      {/* <ApiAlert 
-        title="NEXT_PUBLIC_API_URL" 
-        variant="public" 
+      <Separator />
+      <ApiAlert
+        title="NEXT_PUBLIC_API_URL"
+        variant="public"
         description={`${origin}/api/${params.storeId}`}
-      /> */}
+      />
     </>
   );
 };
