@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-import Modal from "@/components/ui/modal";
+import { Modal } from "@/components/ui/modal";
 import { useStoreModal } from "@/hooks/use-store-modal";
 
 const SetupPage = () => {
