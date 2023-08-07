@@ -24,34 +24,29 @@ export async function POST(
     return new NextResponse("Product ids are required", { status: 400 });
   }
 
-  // find all the products product ids sent to us
   const products = await prismadb.product.findMany({
     where: {
       id: {
-        in: productIds,
-      },
-    },
+        in: productIds
+      }
+    }
   });
 
-  // creating a constant to send to stripe
   const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
 
-  // fill the line_items arr with the objects
   products.forEach((product) => {
     line_items.push({
       quantity: 1,
       price_data: {
-        currency: "USD",
+        currency: 'USD',
         product_data: {
           name: product.name,
         },
-        unit_amount: product.price.toNumber() * 100,
-      },
+        unit_amount: product.price.toNumber() * 100
+      }
     });
   });
 
-  // now create order to store in db
-  // not paid yet since this is just the checkout session
   const order = await prismadb.order.create({
     data: {
       storeId: params.storeId,
@@ -60,33 +55,29 @@ export async function POST(
         create: productIds.map((productId: string) => ({
           product: {
             connect: {
-              id: productId,
-            },
-          },
-        })),
-      },
-    },
+              id: productId
+            }
+          }
+        }))
+      }
+    }
   });
 
-  // now create a session
   const session = await stripe.checkout.sessions.create({
     line_items,
-    mode: "payment",
-    billing_address_collection: "required",
+    mode: 'payment',
+    billing_address_collection: 'required',
     phone_number_collection: {
       enabled: true,
     },
     success_url: `${process.env.FRONTEND_STORE_URL}/cart?success=1`,
     cancel_url: `${process.env.FRONTEND_STORE_URL}/cart?canceled=1`,
     metadata: {
-      orderId: order.id,
+      orderId: order.id
     },
   });
 
-  return NextResponse.json(
-    { url: session.url },
-    {
-      headers: corsHeaders,
-    }
-  );
-}
+  return NextResponse.json({ url: session.url }, {
+    headers: corsHeaders
+  });
+};
